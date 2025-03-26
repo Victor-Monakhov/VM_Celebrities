@@ -18,7 +18,7 @@ namespace VM_Celebrities_Back.Controllers
             _scraper = scraper;
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<IActionResult> GetCelebrities()
         {
             var celebrities = await _repository.GetAllCelebritiesAsync();

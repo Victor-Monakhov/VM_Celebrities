@@ -3,6 +3,19 @@ using VM_Celebrities_Back.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var celebrityOrigins = "tnmOrigins";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: celebrityOrigins,
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200") // Allow only your Angular app
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 builder.Services.AddScoped<ICelebrityRepository, CelebrityRepository>();
 builder.Services.AddScoped<ICelebrityScraperService, CelebrityScraperService.CelebrityScraper>();
 
@@ -42,5 +55,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.MapControllers();
 app.UseRouting();
+app.UseCors(celebrityOrigins);
 
 app.Run();
