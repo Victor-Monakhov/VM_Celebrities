@@ -29,6 +29,7 @@ namespace VM_Celebrities_Back.Services
                     var title = node.SelectSingleNode(".//h3")?.InnerText.Trim() ?? "Unknown";
                     var id = Int32.Parse(title.Split('.')[0]);
                     var name = title.Substring(title.IndexOf('.') + 1).Trim();
+                    
                     // var birthDateText = node.SelectSingleNode(".//span[contains(@class, 'lister-item-year')]")?.InnerText ?? "";
                     var birthDate = new DateTime(); //DateTime.TryParse(birthDateText, out var parsedDate) ? parsedDate : DateTime.MinValue;
                     var role = string.Empty; //node.SelectSingleNode(".//p[contains(@class, 'text-muted')]/text()")?.InnerText.Trim() ?? "Unknown";
