@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../buildMultiTargeting/VM_Celebrities_Back.props" />
+</Project>

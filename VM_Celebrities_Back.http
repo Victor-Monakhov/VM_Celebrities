@@ -1,0 +1,6 @@
+@VM_Celebrities_Back_HostAddress = http://localhost:5263
+
+GET {{VM_Celebrities_Back_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
