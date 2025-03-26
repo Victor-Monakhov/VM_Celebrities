@@ -1,0 +1,31 @@
+# Binaries
+bin/
+obj/
+
+# IDE Configurations
+.idea/
+.vscode/
+*.user
+*.suo
+*.ntvs*
+*.njsproj
+*.sln.cache
+
+# Build and Logs
+*.log
+logs/
+*.cache
+*.tmp
+
+# Configurations and Secrets
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+
+# Docker
+.dockerignore
+Dockerfile
+
+# NuGet
+packages/
+project.lock.json
