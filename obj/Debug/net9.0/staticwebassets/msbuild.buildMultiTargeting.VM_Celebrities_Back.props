@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="../build/VM_Celebrities_Back.props" />
-</Project>
