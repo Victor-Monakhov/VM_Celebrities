@@ -48,7 +48,6 @@ namespace VM_Celebrities_Back.Controllers
         [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateCelebrity(int id, [FromBody] Celebrity? updatedCelebrity)
         {
-            Console.WriteLine($"{updatedCelebrity}, {id}");
             if (updatedCelebrity == null || updatedCelebrity.Id != id)
             {
                 return BadRequest("Invalid celebrity data.");
