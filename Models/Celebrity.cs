@@ -8,7 +8,7 @@ namespace VM_Celebrities_Back.Models
         public string Movie { get; set; } = string.Empty;
         public string ImageUrl { get; set; } = string.Empty;
         public string Info { get; set; } = string.Empty;
-        public DateTime BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
         public IEnumerable<string> Roles { get; set; } = new List<string>();
     }
 }

@@ -1,7 +1,6 @@
 using VM_Celebrities_Back.Interfaces;
 using VM_Celebrities_Back.Repositories;
 using VM_Celebrities_Back.Services;
-using ICelebrityScraperService = VM_Celebrities_Back.Services.ICelebrityScraperService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +18,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddScoped<ICelebrityRepository, CelebrityRepository>();
-builder.Services.AddScoped<ICelebrityScraperService, CelebrityScraperService.CelebrityScraper>();
+builder.Services.AddScoped<ICelebrityScraperService, CelebrityScraperService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

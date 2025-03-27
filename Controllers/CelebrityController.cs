@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using VM_Celebrities_Back.Interfaces;
 using VM_Celebrities_Back.Models;
-using ICelebrityScraperService = VM_Celebrities_Back.Services.ICelebrityScraperService;
 
 namespace VM_Celebrities_Back.Controllers
 {
