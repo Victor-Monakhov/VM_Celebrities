@@ -1,7 +1,7 @@
 using HtmlAgilityPack;
+using Microsoft.Playwright;
 using VM_Celebrities_Back.Interfaces;
 using VM_Celebrities_Back.Models;
-
 namespace VM_Celebrities_Back.Services
 {
     public class CelebrityScraperService : ICelebrityScraperService
@@ -12,8 +12,47 @@ namespace VM_Celebrities_Back.Services
         public async Task<IList<Celebrity>> ScrapeCelebritiesAsync()
         {
             var celebrities = new List<Celebrity>();
-            var web = new HtmlWeb();
-            var doc = await web.LoadFromWebAsync(ImdbUrl);
+            var doc = new HtmlDocument();
+
+            try
+            {
+                //using playwright, it is possible to scrapping dynamic pages to get 100 actors. Otherwise, you will get only 25.
+                //And also you should set userAgent, because otherwise, you will get "403 forbidden" as response from imdb.
+                //I added other approach into catch block for you, so will see at least 25 items, 
+                //if you missed to run "powershell -ExecutionPolicy Bypass -File .\bin\Debug\net8.0\playwright.ps1 install" command.
+
+                using var playwright = await Playwright.CreateAsync();
+                await using var browser =
+                    await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions { Headless = true });
+
+                var context = await browser.NewContextAsync(new BrowserNewContextOptions
+                {
+                    UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
+                                "AppleWebKit/537.36 (KHTML, like Gecko) " +
+                                "Chrome/122.0.0.0 Safari/537.36",
+                    Locale = "en-US"
+                });
+
+                var page = await context.NewPageAsync();
+                await page.GotoAsync(ImdbUrl, new PageGotoOptions
+                {
+                    WaitUntil = WaitUntilState.NetworkIdle,
+                    Timeout = 60000
+                });
+
+                await page.EvaluateAsync(
+                    @"async () => { window.scrollTo(0, document.body.scrollHeight); await new Promise(resolve => setTimeout(resolve, 3000));}");
+
+                var content = await page.ContentAsync();
+
+                doc.LoadHtml(content);
+            }
+            catch
+            {
+                var web = new HtmlWeb();
+                doc = await web.LoadFromWebAsync(ImdbUrl);
+            }
+
             var celebrityNodes = doc.DocumentNode
                 ?.SelectNodes("//li[contains(@class, 'ipc-metadata-list-summary-item')]");
 
