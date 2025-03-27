@@ -1,47 +1,54 @@
 using System.Text.Json;
+using VM_Celebrities_Back.Interfaces;
 using VM_Celebrities_Back.Models;
 
 namespace VM_Celebrities_Back.Repositories
 {
-
-    public interface ICelebrityRepository
-    {
-        Task<List<Celebrity>> GetAllCelebritiesAsync();
-        Task SaveCelebritiesAsync(List<Celebrity> celebrities);
-        Task<Celebrity?> GetCelebrityByIdAsync(int id);
-        Task<List<Celebrity>> DeleteCelebrityAsync(int id);
-        Task<List<Celebrity>> UpdateCelebrityAsync(Celebrity updatedCelebrity);
-        Task<List<Celebrity>> SearchCelebritiesByNameAsync(string searchTerm);
-    }
-    
-    public class CelebrityRepository: ICelebrityRepository
+    public class CelebrityRepository : ICelebrityRepository
     {
         private readonly string _filePath = "celebrities.json";
+        private readonly SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
 
-        public async Task<List<Celebrity>> GetAllCelebritiesAsync()
+        public async Task<IList<Celebrity>> GetAllCelebritiesAsync()
         {
-            if (!File.Exists(_filePath))
+            await _lock.WaitAsync();
+            try
             {
-                return new List<Celebrity>();
-            }
+                if (!File.Exists(_filePath))
+                {
+                    return new List<Celebrity>();
+                }
 
-            var json = await File.ReadAllTextAsync(_filePath);
-            return JsonSerializer.Deserialize<List<Celebrity>>(json) ?? new List<Celebrity>();
+                try
+                {
+                    var json = await File.ReadAllTextAsync(_filePath);
+                    return JsonSerializer.Deserialize<List<Celebrity>>(json) ?? new List<Celebrity>();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[ERROR] Failed to read celebrities: {ex.Message}");
+                    return new List<Celebrity>();
+                }
+            }
+            finally
+            {
+                _lock.Release();
+            }
         }
 
-        public async Task SaveCelebritiesAsync(List<Celebrity> celebrities)
+        public async Task SaveCelebritiesAsync(IList<Celebrity> celebrities)
         {
             var json = JsonSerializer.Serialize(celebrities, new JsonSerializerOptions { WriteIndented = true });
             await File.WriteAllTextAsync(_filePath, json);
         }
-        
+
         public async Task<Celebrity?> GetCelebrityByIdAsync(int id)
         {
             var celebrities = await GetAllCelebritiesAsync();
             return celebrities.FirstOrDefault(c => c.Id == id);
         }
-        
-        public async Task<List<Celebrity>> DeleteCelebrityAsync(int id)
+
+        public async Task<IList<Celebrity>> DeleteCelebrityAsync(int id)
         {
             var celebrities = await GetAllCelebritiesAsync();
 
@@ -54,8 +61,8 @@ namespace VM_Celebrities_Back.Repositories
 
             return celebrities;
         }
-        
-        public async Task<List<Celebrity>> UpdateCelebrityAsync(Celebrity updatedCelebrity)
+
+        public async Task<IList<Celebrity>> UpdateCelebrityAsync(Celebrity updatedCelebrity)
         {
             var celebrities = await GetAllCelebritiesAsync();
 
@@ -75,21 +82,27 @@ namespace VM_Celebrities_Back.Repositories
 
             return celebrities;
         }
-        
-        public async Task<List<Celebrity>> SearchCelebritiesByNameAsync(string searchTerm)
+
+        public async Task<IList<Celebrity>> SearchCelebritiesByNameAsync(string search)
         {
             var celebrities = await GetAllCelebritiesAsync();
 
-            if (string.IsNullOrEmpty(searchTerm))
+            if (string.IsNullOrEmpty(search))
             {
                 return celebrities;
             }
 
             var filteredCelebrities = celebrities
-                .Where(c => c.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                .Where(c => c.Name.Contains(search, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
             return filteredCelebrities;
+        }
+        
+        public async Task<IList<Celebrity>> AddCelebrityAsync(Celebrity newCelebrity)
+        {
+            
+            return null;
         }
     }
 }

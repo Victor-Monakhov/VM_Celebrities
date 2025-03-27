@@ -1,16 +1,18 @@
+using VM_Celebrities_Back.Interfaces;
 using VM_Celebrities_Back.Repositories;
 using VM_Celebrities_Back.Services;
+using ICelebrityScraperService = VM_Celebrities_Back.Services.ICelebrityScraperService;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var celebrityOrigins = "tnmOrigins";
+var celebrityOrigins = "celebrityOrigins";
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: celebrityOrigins,
         policy =>
         {
-            policy.WithOrigins("http://localhost:4200") // Allow only your Angular app
+            policy.WithOrigins("http://localhost:4200")
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
@@ -20,7 +22,6 @@ builder.Services.AddScoped<ICelebrityRepository, CelebrityRepository>();
 builder.Services.AddScoped<ICelebrityScraperService, CelebrityScraperService.CelebrityScraper>();
 
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -44,12 +45,6 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger-api-celebrities/swagger.json", "CELEBRITIES");
         c.RoutePrefix = string.Empty;
     });
-}
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
 }
 
 app.UseHttpsRedirection();

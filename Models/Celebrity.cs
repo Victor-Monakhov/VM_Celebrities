@@ -9,6 +9,6 @@ namespace VM_Celebrities_Back.Models
         public string ImageUrl { get; set; } = string.Empty;
         public string Info { get; set; } = string.Empty;
         public DateTime BirthDate { get; set; }
-        public string[] Roles { get; set; } = [];
+        public IEnumerable<string> Roles { get; set; } = new List<string>();
     }
 }
