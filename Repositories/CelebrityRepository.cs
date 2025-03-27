@@ -101,8 +101,23 @@ namespace VM_Celebrities_Back.Repositories
         
         public async Task<IList<Celebrity>> AddCelebrityAsync(Celebrity newCelebrity)
         {
+            var celebrities = await GetAllCelebritiesAsync();
+            var celebrityToAdd = new Celebrity
+            {
+                Id = celebrities.Count + 1,
+                Name = newCelebrity.Name,
+                Gender = newCelebrity.Gender,
+                BirthDate = newCelebrity.BirthDate,
+                ImageUrl = newCelebrity.ImageUrl,
+                Movie = newCelebrity.Movie,
+                Roles = newCelebrity.Roles,
+                Info = newCelebrity.Info,
+            };
             
-            return null;
+            celebrities.Add(celebrityToAdd);
+            await SaveCelebritiesAsync(celebrities);
+            
+            return celebrities;
         }
     }
 }

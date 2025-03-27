@@ -67,5 +67,17 @@ namespace VM_Celebrities_Back.Controllers
             var matchedCelebrities = await _repository.SearchCelebritiesByNameAsync(name);
             return Ok(matchedCelebrities);
         }
+        
+        [HttpPost("add")]
+        public async Task<IActionResult> AddCelebrity([FromBody] Celebrity? celebrity)
+        {
+            if (celebrity == null)
+            {
+                return BadRequest("Search term is required.");
+            }
+
+            var celebrities = await _repository.AddCelebrityAsync(celebrity);
+            return Ok(celebrities);
+        }
     }
 }

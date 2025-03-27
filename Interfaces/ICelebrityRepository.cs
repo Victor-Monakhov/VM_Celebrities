@@ -10,5 +10,6 @@ namespace VM_Celebrities_Back.Interfaces
         Task<IList<Celebrity>> DeleteCelebrityAsync(int id);
         Task<IList<Celebrity>> UpdateCelebrityAsync(Celebrity updatedCelebrity);
         Task<IList<Celebrity>> SearchCelebritiesByNameAsync(string search);
+        Task<IList<Celebrity>> AddCelebrityAsync(Celebrity newCelebrity);
     }
 }
