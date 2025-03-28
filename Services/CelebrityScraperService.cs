@@ -78,15 +78,9 @@ namespace VM_Celebrities_Back.Services
             {
                 var celebrity = new Celebrity
                 {
-                    Id = index + 1,
-                    Name = "Noname",
-                    Movie = string.Empty,
-                    Roles = new List<string>(),
-                    Gender = string.Empty,
-                    BirthDate = null,
-                    ImageUrl = String.Empty,
-                    Info = String.Empty
+                    Id = index + 1
                 };
+
                 var title = node.SelectSingleNode(".//h3")?.InnerText.Trim();
                 if (title != null)
                 {
@@ -94,8 +88,8 @@ namespace VM_Celebrities_Back.Services
                     if (titleArr.Length == 2) celebrity.Name = titleArr[1].Trim();
                 }
 
-                var innerImdbUrl = node.SelectSingleNode(".//a[contains(@class, 'ipc-title-link-wrapper')]")
-                    ?.GetAttributeValue("href", "").Trim();
+                var innerImdbUrl = node.SelectSingleNode(".//a[contains(@class, 'ipc-title-link-wrapper')]")?.GetAttributeValue("href", "").Trim();
+
                 if (innerImdbUrl != null)
                 {
                     var fullProfileUrl = $"{BaseUrl}{innerImdbUrl}";
@@ -113,25 +107,12 @@ namespace VM_Celebrities_Back.Services
                     }
                 }
 
-                var roles = node.SelectNodes(".//li[contains(@class, 'ipc-inline-list__item')]")
-                    ?.Select(role => role.InnerText.Trim()).ToList();
-                if (roles != null) celebrity.Roles = roles;
-
-                celebrity.Gender = celebrity.Roles
-                    .Any(role => role.ToLower().Contains("actress")) ? "female" : "male";
+                celebrity.Roles = node.SelectNodes(".//li[contains(@class, 'ipc-inline-list__item')]")?.Select(role => role.InnerText.Trim()).ToList() ?? new List<string>();
+                celebrity.Gender = celebrity.Roles.Any(role => role.ToLower().Contains("actress")) ? "female" : "male";
+                celebrity.Movie = node.SelectSingleNode(".//a[contains(@class, 'ipc-link--base')]")?.InnerText.Trim() ?? string.Empty;
+                celebrity.ImageUrl = node.SelectSingleNode(".//img[contains(@class, 'ipc-image')]")?.GetAttributeValue("src", "").Trim() ?? string.Empty;
+                celebrity.Info = node.SelectSingleNode(".//div[contains(@class, 'ipc-html-content-inner-div')]")?.InnerText.Trim() ?? string.Empty;
                 
-                var movie = node.SelectSingleNode(".//a[contains(@class, 'ipc-link--base')]")
-                    ?.InnerText.Trim();
-                if (movie != null) celebrity.Movie = movie;
-
-                var imageUrl = node.SelectSingleNode(".//img[contains(@class, 'ipc-image')]")
-                    ?.GetAttributeValue("src", "").Trim();
-                if (imageUrl != null) celebrity.ImageUrl = imageUrl;
-
-                var info = node.SelectSingleNode(".//div[contains(@class, 'ipc-html-content-inner-div')]")
-                    ?.InnerText.Trim();
-                if (info != null) celebrity.Info = info;
-
                 return celebrity;
             }
             catch (Exception ex)

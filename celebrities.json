@@ -43,7 +43,7 @@
   },
   {
     "Id": 4,
-    "Name": "Noname",
+    "Name": "",
     "Gender": "male",
     "Movie": "Iron Man (2008)",
     "ImageUrl": "https://m.media-amazon.com/images/M/MV5BNzg1MTUyNDYxOF5BMl5BanBnXkFtZTgwNTQ4MTE2MjE@._V1_QL75_UX60_CR0,0,60,60_.jpg",
@@ -743,7 +743,7 @@
   },
   {
     "Id": 54,
-    "Name": "Noname",
+    "Name": "",
     "Gender": "male",
     "Movie": "Pulp Fiction (1994)",
     "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMTQ1NTQwMTYxNl5BMl5BanBnXkFtZTYwMjA1MzY1._V1_QL75_UX60_CR0,0,60,60_.jpg",
