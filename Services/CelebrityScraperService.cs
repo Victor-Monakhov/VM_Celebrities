@@ -16,9 +16,14 @@ namespace VM_Celebrities_Back.Services
 
             try
             {
-                //using playwright, it is possible to scrapping dynamic pages to get 100 actors. Otherwise, you will get only 25.
+                //I'm using both Playwright and HtmlAgilityPack for scraping the page.
+                //Playwright is more heavyweight and slower than HtmlAgilityPack,
+                //but it allows scraping dynamic pages with lazy-loaded content.
+                //HtmlAgilityPack is faster for static pages and works well in multithreaded operations.
+                //To retrieve the birthdate, the scraper needs to check another (static) page.
+                //This task runs in parallel since it is the most expensive operation.
                 //And also you should set userAgent, because otherwise, you will get "403 forbidden" as response from imdb.
-                //I added other approach into catch block for you, so will see at least 25 items, 
+                //I added HtmlAgilityPack only approach into catch block for you, so will see at least 25 items, 
                 //if you missed to run "powershell -ExecutionPolicy Bypass -File .\bin\Debug\net8.0\playwright.ps1 install" command.
 
                 using var playwright = await Playwright.CreateAsync();

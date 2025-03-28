@@ -10,7 +10,9 @@ namespace VM_Celebrities_Back.Controllers
     {
         private readonly ICelebrityRepository _repository;
         private readonly ICelebrityScraperService _scraper;
-
+        
+        // Since this is a small application, I decided to inject the repository directly into the controller.
+        // If the application grows, any excessive logic should be moved to a separate service layer.
         public CelebrityController(ICelebrityRepository repository, ICelebrityScraperService scraper)
         {
             _repository = repository;
