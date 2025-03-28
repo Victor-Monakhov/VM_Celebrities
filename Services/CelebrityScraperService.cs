@@ -90,7 +90,7 @@ namespace VM_Celebrities_Back.Services
                 if (title != null)
                 {
                     var titleArr = title.Split('.');
-                    if (titleArr.Length == 2) celebrity.Name = titleArr[1].Trim();
+                    if (titleArr.Length >= 2) celebrity.Name = titleArr[1].Trim();
                 }
 
                 var innerImdbUrl = node.SelectSingleNode(".//a[contains(@class, 'ipc-title-link-wrapper')]")?.GetAttributeValue("href", "").Trim();

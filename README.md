@@ -1,6 +1,7 @@
 ## Ensure that you have the following installed on your system
 
-.NET SDK 8.0 (https://dotnet.microsoft.com/en-us/download/dotnet/8.0); 
+.NET SDK 8.0 (https://dotnet.microsoft.com/en-us/download/dotnet/8.0);
+
 Node.js  20.14.0 version or later (https://nodejs.org/en/download);
 
 ## Backend Setup (ASP.NET WebApi)
